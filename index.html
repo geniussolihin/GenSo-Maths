@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GenSo Maths - Belajar Matematik Jadi Mudah!</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-purple: #6D28D9;
+            --accent-yellow: #FACC15;
+            --soft-white: #F9FAFB;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--soft-white);
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        .bg-purple-main { background-color: var(--primary-purple); }
+        .text-purple-main { color: var(--primary-purple); }
+        .bg-yellow-main { background-color: var(--accent-yellow); }
+
+        .btn-bounce:active { transform: scale(0.95); }
+        
+        .screen { display: none; min-height: 100vh; }
+        .screen.active { display: block; }
+
+        .card-premium {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .gradient-purple {
+            background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
+
+        .progress-bar { transition: width 0.5s ease-in-out; }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+
+        <div id="screen-splash" class="screen active flex items-center justify-center gradient-purple text-white">
+            <div class="text-center animate__animated animate__zoomIn">
+                <div class="bg-white p-6 rounded-full inline-block mb-4 shadow-2xl">
+                    <i class="fas fa-calculator text-5xl text-purple-main"></i>
+                </div>
+                <h1 class="text-4xl font-bold mb-2">GenSo Maths</h1>
+                <p class="text-yellow-400 font-semibold italic">“Belajar Matematik Jadi Mudah, Seronok & Bijak!”</p>
+                <div class="mt-8">
+                    <div class="w-12 h-12 border-4 border-white border-t-yellow-400 rounded-full animate-spin mx-auto"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-onboarding" class="screen bg-white p-6">
+            <div class="max-w-md mx-auto h-full flex flex-col justify-center">
+                <img src="https://img.freepik.com/free-vector/happy-cute-robot-saying-hello-cartoon-illustration_11460-2646.jpg" class="w-64 mx-auto mb-8 rounded-3xl shadow-lg">
+                <h2 class="text-3xl font-bold text-center text-purple-900 mb-4">Selamat Datang!</h2>
+                <p class="text-center text-gray-600 mb-8">Pilih jenis pengguna untuk bermula</p>
+                
+                <div class="space-y-4">
+                    <button onclick="setRole('student')" class="w-full p-4 card-premium border-2 border-purple-100 flex items-center gap-4 hover:border-purple-500 btn-bounce">
+                        <div class="bg-purple-100 p-3 rounded-xl"><i class="fas fa-user-graduate text-purple-600"></i></div>
+                        <div class="text-left">
+                            <h3 class="font-bold">Saya Murid</h3>
+                            <p class="text-xs text-gray-500">Mula belajar dan kumpul bintang!</p>
+                        </div>
+                    </button>
+                    <button onclick="setRole('parent')" class="w-full p-4 card-premium border-2 border-purple-100 flex items-center gap-4 hover:border-purple-500 btn-bounce">
+                        <div class="bg-blue-100 p-3 rounded-xl"><i class="fas fa-user-friends text-blue-600"></i></div>
+                        <div class="text-left">
+                            <h3 class="font-bold">Saya Ibu Bapa</h3>
+                            <p class="text-xs text-gray-500">Pantau prestasi anak anda.</p>
+                        </div>
+                    </button>
+                    <button onclick="setRole('teacher')" class="w-full p-4 card-premium border-2 border-purple-100 flex items-center gap-4 hover:border-purple-500 btn-bounce">
+                        <div class="bg-green-100 p-3 rounded-xl"><i class="fas fa-chalkboard-teacher text-green-600"></i></div>
+                        <div class="text-left">
+                            <h3 class="font-bold">Saya Guru / Admin</h3>
+                            <p class="text-xs text-gray-500">Urus soalan dan kelas.</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-home" class="screen pb-24">
+            <div class="gradient-purple p-8 rounded-b-[40px] text-white">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <p class="opacity-80">Hai, <span id="user-name-display">Genius!</span></p>
+                        <h2 class="text-2xl font-bold">Jom Belajar Hari Ini!</h2>
+                    </div>
+                    <div onclick="showScreen('screen-profile')" class="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-lg cursor-pointer">
+                        <i class="fas fa-user-astronaut text-purple-900 text-xl"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white/20 p-4 rounded-3xl backdrop-blur-md border border-white/30 flex items-center justify-around">
+                    <div class="text-center">
+                        <p class="text-xs">Level</p>
+                        <p class="font-bold text-lg">5</p>
+                    </div>
+                    <div class="h-8 w-px bg-white/30"></div>
+                    <div class="text-center text-yellow-400">
+                        <p class="text-xs text-white">Bintang</p>
+                        <p class="font-bold text-lg"><i class="fas fa-star mr-1"></i> 128</p>
+                    </div>
+                    <div class="h-8 w-px bg-white/30"></div>
+                    <div class="text-center">
+                        <p class="text-xs">Streak</p>
+                        <p class="font-bold text-lg">3 Hari</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 -mt-4 space-y-6">
+                <div class="bg-yellow-400 p-6 rounded-[32px] shadow-xl flex items-center justify-between">
+                    <div class="max-w-[60%]">
+                        <h3 class="font-bold text-purple-900 text-lg mb-1">Cabaran Minda!</h3>
+                        <p class="text-xs text-purple-800 mb-3">Selesaikan 5 soalan KBAT hari ini.</p>
+                        <button class="bg-purple-900 text-white text-xs px-4 py-2 rounded-full font-bold">Mula Sekarang</button>
+                    </div>
+                    <i class="fas fa-brain text-5xl text-purple-900 opacity-20"></i>
+                </div>
+
+                <h3 class="font-bold text-xl px-2">Menu Utama</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="showScreen('screen-levels')" class="card-premium p-6 flex flex-col items-center gap-2 btn-bounce">
+                        <div class="bg-indigo-100 p-4 rounded-2xl"><i class="fas fa-book-open text-indigo-600 text-2xl"></i></div>
+                        <span class="font-bold text-sm">Mula Belajar</span>
+                    </button>
+                    <button onclick="showScreen('screen-levels')" class="card-premium p-6 flex flex-col items-center gap-2 btn-bounce">
+                        <div class="bg-pink-100 p-4 rounded-2xl"><i class="fas fa-gamepad text-pink-600 text-2xl"></i></div>
+                        <span class="font-bold text-sm">Permainan</span>
+                    </button>
+                    <button onclick="alert('Bakal Tiba!')" class="card-premium p-6 flex flex-col items-center gap-2 btn-bounce">
+                        <div class="bg-orange-100 p-4 rounded-2xl"><i class="fas fa-trophy text-orange-600 text-2xl"></i></div>
+                        <span class="font-bold text-sm">Kuiz Harian</span>
+                    </button>
+                    <button onclick="showParentDashboard()" class="card-premium p-6 flex flex-col items-center gap-2 btn-bounce">
+                        <div class="bg-green-100 p-4 rounded-2xl"><i class="fas fa-chart-line text-green-600 text-2xl"></i></div>
+                        <span class="font-bold text-sm">Laporan</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 flex justify-around items-center z-50">
+                <i onclick="showScreen('screen-home')" class="fas fa-home text-2xl text-purple-600 cursor-pointer"></i>
+                <i onclick="showScreen('screen-levels')" class="fas fa-graduation-cap text-2xl text-gray-300 cursor-pointer"></i>
+                <div class="bg-purple-600 w-14 h-14 rounded-full -mt-12 flex items-center justify-center border-8 border-soft-white shadow-xl">
+                    <i class="fas fa-plus text-white text-xl"></i>
+                </div>
+                <i onclick="showParentDashboard()" class="fas fa-users text-2xl text-gray-300 cursor-pointer"></i>
+                <i onclick="showScreen('screen-profile')" class="fas fa-cog text-2xl text-gray-300 cursor-pointer"></i>
+            </div>
+        </div>
+
+        <div id="screen-levels" class="screen p-6">
+            <button onclick="showScreen('screen-home')" class="mb-6 text-purple-600 font-bold"><i class="fas fa-arrow-left mr-2"></i> Kembali</button>
+            <h2 class="text-3xl font-bold mb-8">Pilih Darjah</h2>
+
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-purple-600 font-bold mb-4 flex items-center"><span class="bg-purple-600 text-white px-3 py-1 rounded-lg mr-2">Tahap 1</span> (Asas)</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <button onclick="selectStandard(1)" class="card-premium p-5 flex items-center justify-between gradient-purple text-white btn-bounce">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/20 p-3 rounded-xl"><i class="fas fa-1"></i></div>
+                                <span class="font-bold">Darjah 1</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button onclick="selectStandard(2)" class="card-premium p-5 flex items-center justify-between bg-indigo-500 text-white btn-bounce">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/20 p-3 rounded-xl"><i class="fas fa-2"></i></div>
+                                <span class="font-bold">Darjah 2</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button onclick="selectStandard(3)" class="card-premium p-5 flex items-center justify-between bg-blue-500 text-white btn-bounce">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/20 p-3 rounded-xl"><i class="fas fa-3"></i></div>
+                                <span class="font-bold">Darjah 3</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-orange-600 font-bold mb-4 flex items-center"><span class="bg-orange-600 text-white px-3 py-1 rounded-lg mr-2">Tahap 2</span> (Lanjutan)</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <button onclick="selectStandard(4)" class="card-premium p-5 flex items-center justify-between bg-orange-500 text-white btn-bounce">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/20 p-3 rounded-xl"><i class="fas fa-4"></i></div>
+                                <span class="font-bold">Darjah 4</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button onclick="selectStandard(5)" class="card-premium p-5 flex items-center justify-between bg-red-500 text-white btn-bounce">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/20 p-3 rounded-xl"><i class="fas fa-5"></i></div>
+                                <span class="font-bold">Darjah 5</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button onclick="selectStandard(6)" class="card-premium p-5 flex items-center justify-between bg-purple-900 text-white btn-bounce">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/20 p-3 rounded-xl"><i class="fas fa-6"></i></div>
+                                <span class="font-bold">Darjah 6</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-topics" class="screen p-6">
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="showScreen('screen-levels')" class="text-purple-600 font-bold"><i class="fas fa-arrow-left"></i></button>
+                <h2 id="current-darjah-title" class="text-2xl font-bold">Darjah 1</h2>
+                <div></div>
+            </div>
+
+            <div id="topics-container" class="space-y-4">
+                </div>
+        </div>
+
+        <div id="screen-practice" class="screen bg-purple-50">
+            <div class="p-6 bg-white shadow-sm flex items-center justify-between">
+                <button onclick="confirmExit()" class="text-gray-400"><i class="fas fa-times text-xl"></i></button>
+                <div class="flex-1 mx-6">
+                    <div class="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div id="practice-progress" class="h-full bg-green-500 progress-bar" style="width: 10%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center text-yellow-500 font-bold">
+                    <i class="fas fa-star mr-1"></i> <span id="session-stars">0</span>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="card-premium p-8 mb-8 text-center animate__animated animate__fadeIn">
+                    <h3 id="question-text" class="text-2xl font-bold text-purple-900 mb-6">3 + 5 = ?</h3>
+                    <div id="options-container" class="grid grid-cols-2 gap-4">
+                        </div>
+                </div>
+
+                <div id="ai-hint-box" class="hidden animate__animated animate__slideInUp">
+                    <div class="flex items-start gap-4 bg-yellow-100 p-4 rounded-2xl border-2 border-yellow-200">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" class="w-12 h-12">
+                        <div>
+                            <p class="font-bold text-yellow-800 text-sm">Cikgu GenSo:</p>
+                            <p id="ai-hint-text" class="text-sm text-yellow-700 italic">"Cuba kira menggunakan jari atau lukis objek kecil."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fixed bottom-0 left-0 right-0 p-6 bg-white">
+                <button id="btn-hint" onclick="getAIHint()" class="w-full py-4 rounded-2xl font-bold text-purple-600 border-2 border-purple-100 mb-2 btn-bounce">
+                    <i class="fas fa-lightbulb mr-2"></i> Tanya Cikgu GenSo
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen flex items-center justify-center p-6 gradient-purple">
+            <div class="card-premium p-8 w-full max-w-sm text-center animate__animated animate__bounceIn">
+                <div class="mb-6">
+                    <i class="fas fa-trophy text-6xl text-yellow-400"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-2">Hebat!</h2>
+                <p class="text-gray-500 mb-6">Kamu telah menyelesaikan topik ini!</p>
+                
+                <div class="flex justify-center gap-2 mb-8 text-3xl">
+                    <i class="fas fa-star text-yellow-400 animate__animated animate__pulse animate__infinite"></i>
+                    <i class="fas fa-star text-yellow-400 animate__animated animate__pulse animate__infinite animate__delay-1s"></i>
+                    <i class="fas fa-star text-yellow-400 animate__animated animate__pulse animate__infinite animate__delay-2s"></i>
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="showScreen('screen-home')" class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold shadow-lg shadow-purple-200 btn-bounce">Kembali ke Menu</button>
+                    <button onclick="showScreen('screen-levels')" class="w-full py-4 border-2 border-purple-100 text-purple-600 rounded-2xl font-bold btn-bounce">Teruskan Belajar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-parent" class="screen p-6 bg-gray-50">
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="showScreen('screen-home')" class="text-purple-600 font-bold"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="text-2xl font-bold">Dashboard Ibu Bapa</h2>
+                <i class="fas fa-user-circle text-2xl text-gray-400"></i>
+            </div>
+
+            <div class="card-premium p-6 mb-6 flex items-center gap-4 border-l-8 border-purple-600">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-child text-2xl text-purple-600"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Aiman Hafiz</h3>
+                    <p class="text-xs text-gray-500">Darjah 3 • Level 5</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="card-premium p-4 text-center">
+                    <p class="text-[10px] uppercase text-gray-400 font-bold mb-1">Markah Purata</p>
+                    <p class="text-2xl font-bold text-purple-600">88%</p>
+                </div>
+                <div class="card-premium p-4 text-center">
+                    <p class="text-[10px] uppercase text-gray-400 font-bold mb-1">Kuiz Selesai</p>
+                    <p class="text-2xl font-bold text-purple-600">24</p>
+                </div>
+            </div>
+
+            <div class="card-premium p-6 mb-6">
+                <h4 class="font-bold mb-4">Analisis Prestasi</h4>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Tambah & Tolak</span>
+                            <span class="text-green-500 font-bold">Cemerlang</span>
+                        </div>
+                        <div class="h-2 w-full bg-gray-100 rounded-full"><div class="h-full bg-green-500 rounded-full" style="width: 95%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Pecahan</span>
+                            <span class="text-orange-500 font-bold">Perlu Latihan</span>
+                        </div>
+                        <div class="h-2 w-full bg-gray-100 rounded-full"><div class="h-full bg-orange-500 rounded-full" style="width: 45%"></div></div>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-purple-50 rounded-2xl border border-purple-100">
+                    <p class="text-xs text-purple-800 leading-relaxed">
+                        <i class="fas fa-info-circle mr-1"></i> 
+                        Anak anda menunjukkan kemajuan dalam topik tambah dan tolak, tetapi masih perlu latihan tambahan dalam topik <strong>pecahan</strong>.
+                    </p>
+                </div>
+            </div>
+            
+            <button class="w-full py-4 bg-white border-2 border-purple-100 text-purple-600 rounded-2xl font-bold flex items-center justify-center gap-2 btn-bounce">
+                <i class="fas fa-file-pdf"></i> Muat Turun Laporan PDF
+            </button>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-database-compat.js"></script>
+
+    <script>
+        // FIREBASE CONFIG (Disediakan oleh Pengguna)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYPpixrtYSwK9qz9QWa4sOlZ9yFSfGI6g",
+            authDomain: "genso-maths.firebaseapp.com",
+            databaseURL: "https://genso-maths-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "genso-maths",
+            storageBucket: "genso-maths.firebasestorage.app",
+            messagingSenderId: "97272323",
+            appId: "1:97272323:web:84321c2a93eddcd0d24436"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // DATA SYLLABUS (Contoh untuk Demo)
+        const SYLLABUS = {
+            1: [
+                { id: '1-1', title: 'Nombor hingga 100', icon: 'fa-list-ol', color: 'bg-indigo-500', 
+                  questions: [
+                      { q: 'Pilih nombor Lima Puluh Dua', opt: ['25', '52', '50', '5'], a: '52', hint: 'Nombor ini bermula dengan angka 5.' },
+                      { q: 'Apakah nombor selepas 19?', opt: ['18', '20', '21', '10'], a: '20', hint: 'Kira satu langkah selepas sembilan belas.' }
+                  ] 
+                },
+                { id: '1-2', title: 'Tambah Mudah', icon: 'fa-plus', color: 'bg-green-500',
+                  questions: [
+                      { q: '3 + 4 = ?', opt: ['6', '7', '8', '9'], a: '7', hint: 'Kira 3 dan sambung 4 lagi.' }
+                  ]
+                }
+            ],
+            2: [
+                { id: '2-1', title: 'Nombor hingga 1,000', icon: 'fa-layer-group', color: 'bg-blue-500', 
+                  questions: [
+                      { q: 'Nilai tempat bagi 5 dalam 521?', opt: ['Sa', 'Puluh', 'Ratus', 'Ribu'], a: 'Ratus', hint: 'Kedudukan paling kiri dalam 3 digit.' }
+                  ]
+                }
+            ],
+            3: [
+                { id: '3-1', title: 'Pecahan Asas', icon: 'fa-pie-chart', color: 'bg-pink-500', 
+                  questions: [
+                      { q: 'Manakah satu per dua?', opt: ['1/2', '1/4', '2/1', '2/4'], a: '1/2', hint: 'Separuh daripada satu objek.' }
+                  ]
+                }
+            ],
+            4: [
+                { id: '4-1', title: 'Operasi Bergabung', icon: 'fa-random', color: 'bg-orange-500', 
+                  questions: [
+                      { q: '10 + 5 × 2 = ?', opt: ['30', '20', '25', '15'], a: '20', hint: 'Ingat! Selesaikan darab dahulu.' }
+                  ]
+                }
+            ],
+            5: [
+                { id: '5-1', title: 'Peratus', icon: 'fa-percent', color: 'bg-red-500', 
+                  questions: [
+                      { q: 'Tukarkan 0.5 kepada peratus', opt: ['5%', '50%', '500%', '0.5%'], a: '50%', hint: 'Darabkan dengan seratus.' }
+                  ]
+                }
+            ],
+            6: [
+                { id: '6-1', title: 'KBAT Lanjutan', icon: 'fa-brain', color: 'bg-purple-900', 
+                  questions: [
+                      { q: 'Nisbah 2:5. Jika jumlah ialah 70, berapakah nilai bahagian kecil?', opt: ['10', '20', '30', '40'], a: '20', hint: 'Satu bahagian bersamaan 70 ÷ (2+5).' }
+                  ]
+                }
+            ]
+        };
+
+        // STATE MANAGEMENT
+        let currentState = {
+            user: { role: 'student', name: 'Genius' },
+            currentStandard: 1,
+            currentTopic: null,
+            questionIndex: 0,
+            stars: 0
+        };
+
+        // NAVIGATION LOGIC
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // INITIALIZATION
+        window.onload = () => {
+            setTimeout(() => {
+                showScreen('screen-onboarding');
+            }, 2500);
+        };
+
+        function setRole(role) {
+            currentState.user.role = role;
+            if(role === 'student') showScreen('screen-home');
+            else if(role === 'parent') showParentDashboard();
+            else alert('Mod Guru/Admin memerlukan pengesahan.');
+        }
+
+        function selectStandard(std) {
+            currentState.currentStandard = std;
+            document.getElementById('current-darjah-title').innerText = 'Darjah ' + std;
+            const container = document.getElementById('topics-container');
+            container.innerHTML = '';
+            
+            const topics = SYLLABUS[std] || [];
+            topics.forEach(topic => {
+                container.innerHTML += `
+                    <button onclick="startTopic('${topic.id}')" class="w-full card-premium p-5 flex items-center justify-between border-2 border-transparent hover:border-purple-200 btn-bounce">
+                        <div class="flex items-center gap-4 text-left">
+                            <div class="${topic.color} text-white p-4 rounded-2xl shadow-lg shadow-gray-100">
+                                <i class="fas ${topic.icon} text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">${topic.title}</h4>
+                                <p class="text-[10px] text-gray-400">0% Selesai • 5 Soalan</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-play text-purple-200"></i>
+                    </button>
+                `;
+            });
+            showScreen('screen-topics');
+        }
+
+        function startTopic(topicId) {
+            const std = currentState.currentStandard;
+            currentState.currentTopic = SYLLABUS[std].find(t => t.id === topicId);
+            currentState.questionIndex = 0;
+            currentState.stars = 0;
+            loadQuestion();
+            showScreen('screen-practice');
+        }
+
+        function loadQuestion() {
+            const topic = currentState.currentTopic;
+            const q = topic.questions[currentState.questionIndex];
+            
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('ai-hint-box').classList.add('hidden');
+            document.getElementById('ai-hint-text').innerText = q.hint;
+            document.getElementById('practice-progress').style.width = ((currentState.questionIndex / topic.questions.length) * 100) + '%';
+            document.getElementById('session-stars').innerText = currentState.stars;
+
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = '';
+            q.opt.forEach(option => {
+                optContainer.innerHTML += `
+                    <button onclick="checkAnswer('${option}')" class="py-4 px-2 card-premium border-2 border-purple-50 text-purple-900 font-bold hover:bg-purple-600 hover:text-white transition-all btn-bounce">
+                        ${option}
+                    </button>
+                `;
+            });
+        }
+
+        function checkAnswer(answer) {
+            const topic = currentState.currentTopic;
+            const correct = topic.questions[currentState.questionIndex].a;
+
+            if(answer === correct) {
+                currentState.stars += 5;
+                currentState.questionIndex++;
+                if(currentState.questionIndex >= topic.questions.length) {
+                    showScreen('screen-result');
+                } else {
+                    loadQuestion();
+                }
+            } else {
+                alert('Opps! Cuba lagi. Cikgu GenSo ada hint!');
+                getAIHint();
+            }
+        }
+
+        function getAIHint() {
+            document.getElementById('ai-hint-box').classList.remove('hidden');
+        }
+
+        function showParentDashboard() {
+            showScreen('screen-parent');
+        }
+
+        function confirmExit() {
+            if(confirm('Adakah anda pasti mahu berhenti? Progress sesi ini akan hilang.')) {
+                showScreen('screen-home');
+            }
+        }
+    </script>
+</body>
+</html>
